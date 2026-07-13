@@ -10,4 +10,5 @@ if (!port) {
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
+  console.log(`Swagger docs available at http://localhost:${port}/api-docs`);
 });
