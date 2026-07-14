@@ -1,2 +1,8 @@
+**/.DS_Store
+
+automation/node_modules/
+automation/cron/*
+!automation/cron/README.md
+
 backend/node_modules/
 backend/.env
