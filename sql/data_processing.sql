@@ -21,10 +21,6 @@ INSERT INTO employees (Name, Position, Join_Date, Release_Date, Year_of_Experien
 INSERT INTO employees (Name, Position, Join_Date, Release_Date, Year_of_Experience, Salary)
 VALUES ('Albert', 'Engineer', '2024-01-24', NULL, 2.5, 50);
 
--- 1. Add new employee named Albert
-INSERT INTO employees (Name, Position, Join_Date, Release_Date, Year_of_Experience, Salary)
-VALUES ('Albert', 'Engineer', '2024-01-24', NULL, 2.5, 50);
-
 -- 2. Update all employees salary for Engineer position
 UPDATE employees
 SET Salary = 85
@@ -33,7 +29,7 @@ WHERE Position = 'Engineer';
 -- 3. SUM Total Expense 2021
 SELECT SUM(Salary) AS Total_Salary_2021
 FROM employees
-WHERE Join_Date <= '2021-12-31'
+WHERE (Join_Date <= '2021-12-31' AND join_date >= '2021-01-01') AND (Release_Date IS NULL OR Release_Date >= '2021-01-01');
 
 -- 4. Show All employees for longest experience
 SELECT * FROM employees
