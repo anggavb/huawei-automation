@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Huawei Dev Test - Form App</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --accent-color: #6366f1;
+      --accent-hover: #4f46e5;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        grid-template-columns: 1.2fr 1.8fr;
+      }
+    }
+
+    /* Glassmorphism card styling */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.15);
+    }
+
+    .header-section {
+      grid-column: 1 / -1;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .header-section h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(to right, #818cf8, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .header-section p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #e2e8f0;
+    }
+
+    h2::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 1.25rem;
+      background: var(--accent-color);
+      border-radius: 2px;
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, var(--accent-color) 0%, #4f46e5 100%);
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    button:hover {
+      opacity: 0.95;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    /* Toast Notification */
+    .toast {
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .toast.success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--success-color);
+    }
+
+    .toast.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: var(--error-color);
+    }
+
+    /* Data Table / List Styles */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      padding: 0.75rem 1rem;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    td {
+      padding: 1rem;
+      font-size: 0.95rem;
+      border-bottom: 1px solid var(--border-color);
+      color: #cbd5e1;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .badge-id {
+      background: rgba(99, 102, 241, 0.15);
+      color: #a5b4fc;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-family: monospace;
+      font-weight: 600;
+    }
+
+    .empty-state {
+      color: var(--text-muted);
+      text-align: center;
+      padding: 2rem 0;
+      font-style: italic;
+    }
+
+    /* API Link Button */
+    .api-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.850rem;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .api-badge:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in-row {
+      animation: fadeIn 0.5s ease forwards;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-section">
+      <h1>Backend Form Portal</h1>
+      <p>Technical Test - Day 1 Web Interface</p>
+    </div>
+
+    <!-- FORM INPUT CARD -->
+    <div class="card">
+      <h2>Kirim Data Form</h2>
+      <form id="submissionForm">
+        <div class="form-group">
+          <label for="name">Nama Lengkap</label>
+          <input type="text" id="name" name="name" placeholder="Masukkan nama Anda..." required>
+        </div>
+        <div class="form-group">
+          <label for="from">Asal / Instansi</label>
+          <input type="text" id="from" name="from" placeholder="Contoh: Jakarta / Universitas X" required>
+        </div>
+        <button type="submit" id="submitBtn">Kirim Form</button>
+      </form>
+      <div id="toast" class="toast"></div>
+    </div>
+
+    <!-- DATA VIEWER CARD -->
+    <div class="card">
+      <h2>Daftar Pengiriman Form</h2>
+      <div class="table-container">
+        <table id="formDataTable">
+          <thead>
+            <tr>
+              <th style="width: 15%;">ID</th>
+              <th style="width: 45%;">Nama</th>
+              <th style="width: 40%;">Asal</th>
+            </tr>
+          </thead>
+          <tbody id="dataTableBody">
+            <% if (formData && formData.length > 0) { %>
+              <% formData.forEach(item => { %>
+                <tr>
+                  <td><span class="badge-id">#<%= item.id %></span></td>
+                  <td><%= item.name %></td>
+                  <td><%= item.from %></td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr id="emptyRow">
+                <td colspan="3" class="empty-state">Belum ada data form yang dikirim.</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+      
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a href="/api-docs" class="api-badge" target="_blank">
+          Swagger API Documentation
+        </a>
+        <a href="/api/form" class="api-badge" target="_blank">
+          View JSON Endpoints
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('submissionForm');
+    const toast = document.getElementById('toast');
+    const submitBtn = document.getElementById('submitBtn');
+    const tableBody = document.getElementById('dataTableBody');
+    const emptyRow = document.getElementById('emptyRow');
+
+    function showToast(message, type) {
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 4000);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value.trim();
+      const from = document.getElementById('from').value.trim();
+
+      if (!name || !from) {
+        showToast('Semua input wajib diisi.', 'error');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Mengirim...';
+
+      try {
+        const response = await fetch('/api/form', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name, from })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showToast('Data berhasil disimpan!', 'success');
+          form.reset();
+
+          // Hapus baris empty state jika ada
+          const currentEmptyRow = document.getElementById('emptyRow');
+          if (currentEmptyRow) {
+            currentEmptyRow.remove();
+          }
+
+          // Tambahkan data baru secara dinamis ke tabel dengan animasi
+          const newRow = document.createElement('tr');
+          newRow.className = 'fade-in-row';
+          newRow.innerHTML = `
+            <td><span class="badge-id">#${result.data.id}</span></td>
+            <td>${escapeHtml(result.data.name)}</td>
+            <td>${escapeHtml(result.data.from)}</td>
+          `;
+          tableBody.appendChild(newRow);
+        } else {
+          const errMsg = result.errors ? result.errors.join(', ') : result.message;
+          showToast(errMsg || 'Gagal mengirim data.', 'error');
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('Terjadi kesalahan jaringan atau server.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Kirim Form';
+      }
+    });
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+  </script>
+</body>
+</html>
