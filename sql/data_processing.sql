@@ -29,7 +29,7 @@ WHERE Position = 'Engineer';
 -- 3. SUM Total Expense 2021
 SELECT SUM(Salary) AS Total_Salary_2021
 FROM employees
-WHERE (Join_Date <= '2021-12-31' AND join_date >= '2021-01-01') AND (Release_Date IS NULL OR Release_Date >= '2021-01-01');
+WHERE Join_Date <= '2021-12-31' AND (Release_Date IS NULL OR Release_Date >= '2021-01-01');
 
 -- 4. Show All employees for longest experience
 SELECT * FROM employees
